@@ -16,11 +16,12 @@ jobs:
           path: source
       - name: Download and build kernel
         run: |
+          apt install -y libelf-dev
           mkdir linux linux/source linux/build
           cp source/kernelconfig linux/build/.config
           cd linux/source
           curl -L https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.19.8.tar.xz | tar x --xz --strip-components=1
-          make -j4 O=../build bzImage
+          make -j4 O=../build ARCH=x86_64 bzImage
       - name: Run testcase
         run: |
           cd source
