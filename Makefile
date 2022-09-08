@@ -5,7 +5,7 @@ GZIP ?= gzip
 LDDTREE ?= lddtree
 QEMU = qemu-system-x86_64
 
-TEST_ON_KERNEL ?= $(shell $(CABAL) exec command -- -v test-on-kernel)
+TEST_ON_KERNEL ?= $(shell $(CABAL) exec which -- test-on-kernel)
 
 BZIMAGE ?= bzImage
 INITRAMFS ?= initramfs
