@@ -14,6 +14,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: source
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: linux
+          key: ${{ runner.os }}-linux-5.19.8
       - name: Download and build kernel
         run: |
           sudo apt-get update
@@ -21,7 +26,9 @@ jobs:
           mkdir linux linux/source linux/build
           cp source/kernelconfig linux/build/.config
           cd linux/source
-          curl -L https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.19.8.tar.xz | tar x --xz --strip-components=1
+          if ! test -f Makefile; then
+              curl -L https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.19.8.tar.xz | tar x --xz --strip-components=1
+          fi
           make -j4 O=../build ARCH=x86_64 bzImage
       - name: Run testcase
         run: |
