@@ -1,0 +1,30 @@
+---
+name: Test
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: source
+      - name: Download and build kernel
+        run: |
+          mkdir linux linux/source linux/build
+          cp source/kernelconfig linux/build/.config
+          cd linux/source
+          curl -L https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.19.8.tar.xz | tar x --strip-components=1
+          make -j4 O=../build bzImage
+      - name: Run testcase
+        run: |
+          cd source
+          ln -s ../linux/build/arch/x86/boot/bzImage
+          export PATH=$PATH:../linux/build/usr
+          make initramfs
+          make run

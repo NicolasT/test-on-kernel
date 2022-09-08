@@ -27,4 +27,13 @@ Source-Repository head
 Executable test-on-kernel
   Main-Is:             Main.hs
   Build-Depends:       base ^>=4.14.2.0
+                     , unix ^>=2.7.2.2
+                     , linux-syscalls
+  Default-Language:    Haskell2010
+
+Library linux-syscalls
+  Exposed-Modules:     System.Linux.Reboot
+  Hs-Source-Dirs:      internal/linux-syscalls
+  Build-Depends:       base
+  Build-Tool-Depends:  hsc2hs:hsc2hs
   Default-Language:    Haskell2010
