@@ -18,12 +18,14 @@ run: $(INITRAMFS) $(BZIMAGE)
 		-nographic \
 		-no-reboot \
 		$(shell test -e /dev/kvm && echo "-enable-kvm" || echo "") \
-		-cpu $(shell test -e /dev/kvm && echo "host" || echo "max") \
-		-M microvm,x-option-roms=off,pit=off,pic=off,isa-serial=off,rtc=off \
+		$(shell test -e /dev/kvm && echo "-cpu host" || echo "") \
+		-M microvm,x-option-roms=off,pic=off,isa-serial=off$(shell test -e /dev/kvm && echo ",pit=off,rtc=off" || echo "") \
 		-no-acpi \
 		-chardev stdio,id=virtiocon0 \
 		-device virtio-serial-device \
 		-device virtconsole,chardev=virtiocon0 \
+		-object rng-random,filename=/dev/urandom,id=rng0 \
+		-device virtio-rng-device,rng=rng0 \
 		-kernel $(BZIMAGE) \
 		-initrd $(INITRAMFS) \
 		-append "console=hvc0 reboot=t quiet"
