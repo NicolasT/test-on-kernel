@@ -19,7 +19,7 @@ jobs:
           mkdir linux linux/source linux/build
           cp source/kernelconfig linux/build/.config
           cd linux/source
-          curl -L https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.19.8.tar.xz | tar x --strip-components=1
+          curl -L https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.19.8.tar.xz | tar x --xz --strip-components=1
           make -j4 O=../build bzImage
       - name: Run testcase
         run: |
