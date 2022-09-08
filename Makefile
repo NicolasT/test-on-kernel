@@ -28,7 +28,7 @@ run: $(INITRAMFS) $(BZIMAGE)
 		-device virtio-rng-device,rng=rng0 \
 		-kernel $(BZIMAGE) \
 		-initrd $(INITRAMFS) \
-		-append "console=hvc0 reboot=t quiet"
+		-append "console=hvc0 reboot=t"
 .PHONY: run
 
 initramfs: initramfs.cpio
