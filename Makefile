@@ -18,7 +18,7 @@ run: $(INITRAMFS) $(BZIMAGE)
 		-nographic \
 		-no-reboot \
 		$(shell test -e /dev/kvm && echo "-enable-kvm" || echo "") \
-		-cpu host \
+		-cpu $(shell test -e /dev/kvm && echo "host" || echo "max") \
 		-M microvm,x-option-roms=off,pit=off,pic=off,isa-serial=off,rtc=off \
 		-no-acpi \
 		-chardev stdio,id=virtiocon0 \
