@@ -17,7 +17,7 @@ run: $(INITRAMFS) $(BZIMAGE)
 		-nodefaults -no-user-config \
 		-nographic \
 		-no-reboot \
-		-enable-kvm \
+		$(shell test -e /dev/kvm && echo "-enable-kvm" || echo "") \
 		-cpu host \
 		-M microvm,x-option-roms=off,pit=off,pic=off,isa-serial=off,rtc=off \
 		-no-acpi \
