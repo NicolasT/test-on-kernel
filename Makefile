@@ -33,8 +33,10 @@ run: $(INITRAMFS) $(BZIMAGE)
 
 initramfs: initramfs.cpio
 	$(GZIP) -c -9 < $< > $@
+	lsinitrd $@
 
 initramfs.cpio: initramfs.cpiolist $(TEST_ON_KERNEL)
+	cat $<
 	$(GEN_INIT_CPIO) -t 0 -c - < $< > $@
 
 initramfs.cpiolist: test-on-kernel.lddtree
