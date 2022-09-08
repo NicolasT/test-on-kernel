@@ -3,6 +3,12 @@ Cabal-Version:       2.2
 Name:                test-on-kernel
 Version:             0.1.0.0
 Synopsis:            Run a specific test on a specific Linux kernel build using Qemu
+Description:
+  When testing software interacting with the Linux kernel, it can be
+  useful to test it on various versions or configurations of the Linux
+  kernel.
+  .
+  This tool allows to run such tests on kernel images, efficiently.
 Homepage:            https://github.com/NicolasT/test-on-kernel
 License:             GPL-3.0-only
 License-File:        LICENSE
@@ -10,6 +16,11 @@ Author:              Nicolas Trangez
 Maintainer:          ikke@nicolast.be
 Category:            Testing
 Extra-Source-Files:  CHANGELOG.md, README.md
+
+Source-Repository head
+  Type:                git
+  Location:            https://github.com/NicolasT/test-on-kernel.git
+  Branch:              main
 
 Executable test-on-kernel
   Main-Is:             Main.hs
