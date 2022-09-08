@@ -47,6 +47,8 @@ initramfs.cpiolist: test-on-kernel.lddtree
 	echo "nod /dev/console 0644 0 0 c 5 1" >> $@
 	echo "file /init $(TEST_ON_KERNEL) 0755 0 0" >> $@
 	echo "dir /lib64 0755 0 0" >> $@
+	echo "dir /lib 0755 0 0" >> $@
+	echo "dir /lib/x86_64-linux-gnu 0755 0 0" >> $@
 	cat $< | $(GREP) -v "$(TEST_ON_KERNEL)" | while read line; do echo "file $$line $$line 0755 0 0" >> $@; done
 
 test-on-kernel.lddtree: $(TEST_ON_KERNEL)
