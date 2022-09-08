@@ -25,7 +25,9 @@ jobs:
           make -j4 O=../build ARCH=x86_64 bzImage
       - name: Run testcase
         run: |
+          cabal update
           cd source
+          cabal build test-on-kernel
           ln -s ../linux/build/arch/x86/boot/bzImage
           export PATH=$PATH:../linux/build/usr
           make initramfs
