@@ -23,7 +23,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends curl libelf-dev
-          mkdir linux linux/source linux/build
+          mkdir -p linux linux/source linux/build
           cp source/kernelconfig linux/build/.config
           cd linux/source
           if ! test -f Makefile; then
