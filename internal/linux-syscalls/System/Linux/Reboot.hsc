@@ -13,6 +13,7 @@ import Foreign.C.Error (throwErrnoIfMinus1)
 #include <sys/reboot.h>
 
 data RebootCommand = Autoboot
+                   | HaltSystem
     deriving (Show, Eq)
 
 foreign import capi unsafe "sys/reboot.h reboot"
@@ -22,6 +23,7 @@ reboot :: RebootCommand -> IO a
 reboot cmd = do
     rc <- throwErrnoIfMinus1 "reboot" $ c_reboot $ case cmd of
         Autoboot -> #{const RB_AUTOBOOT}
+        HaltSystem -> #{const RB_HALT_SYSTEM}
 
     unless (rc == 0) $
         fail $ "reboot returned. Furthermore, it returned " ++ show rc ++ "."

@@ -21,9 +21,11 @@ run: $(INITRAMFS) $(BZIMAGE)
 		$(shell test -e /dev/kvm && echo "-cpu host" || echo "") \
 		-M microvm,x-option-roms=off,pic=off,isa-serial=off$(shell test -e /dev/kvm && echo ",pit=off,rtc=off" || echo "") \
 		-no-acpi \
-		-chardev stdio,id=virtiocon0 \
 		-device virtio-serial-device \
+		-chardev stdio,id=virtiocon0 \
 		-device virtconsole,chardev=virtiocon0 \
+		-chardev file,path=output,id=output \
+		-device virtserialport,chardev=output \
 		-object rng-random,filename=/dev/urandom,id=rng0 \
 		-device virtio-rng-device,rng=rng0 \
 		-kernel $(BZIMAGE) \
