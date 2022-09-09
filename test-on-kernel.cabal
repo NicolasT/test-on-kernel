@@ -32,6 +32,7 @@ Executable test-on-kernel
                      , directory
                      , exceptions
                      , transformers
+                     , co-log-instances
                      , linux-syscalls
   Default-Language:    Haskell2010
 
@@ -42,4 +43,13 @@ Library linux-syscalls
   Hs-Source-Dirs:      internal/linux-syscalls
   Build-Depends:       base
   Build-Tool-Depends:  hsc2hs:hsc2hs
+  Default-Language:    Haskell2010
+
+Library co-log-instances
+  Exposed-Modules:     Colog.Instances
+  Hs-Source-Dirs:      internal/co-log-instances
+  Build-Depends:       base
+                     , co-log ^>=0.4
+                     , exceptions
+                     , transformers
   Default-Language:    Haskell2010

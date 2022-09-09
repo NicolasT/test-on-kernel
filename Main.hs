@@ -1,10 +1,9 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE StandaloneDeriving #-}
 
 module Main where
 
 import Colog (LoggerT(..), cmap, fmtMessage, logError, logInfo, logTextStdout, usingLoggerT)
+import Colog.Instances ()
 import Control.Exception.Base (SomeException, throwIO)
 import Control.Monad (unless)
 import Control.Monad.Catch (MonadCatch(..), MonadMask, MonadThrow(..), finally, try)
@@ -46,9 +45,3 @@ finallyHalt act = finally act' $ do
             Left e -> fail (show (e :: SomeException)) -- print (e :: SomeException) >> throwIO e
             Right _ -> return ()
         return undefined
-
-
-deriving instance MonadFail m => MonadFail (LoggerT msg m)
-deriving instance MonadThrow m => MonadThrow (LoggerT msg m)
-deriving instance MonadCatch m => MonadCatch (LoggerT msg m)
-deriving instance MonadMask m => MonadMask (LoggerT msg m)
