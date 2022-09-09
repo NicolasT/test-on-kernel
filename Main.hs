@@ -1,49 +1,54 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE StandaloneDeriving #-}
+
 module Main where
 
-import Control.Exception.Base (SomeException, finally, onException, throwIO, try)
+import Colog (LoggerT(..), cmap, fmtMessage, logError, logInfo, logTextStdout, usingLoggerT)
+import Control.Exception.Base (SomeException, throwIO)
 import Control.Monad (unless)
+import Control.Monad.Catch (MonadCatch(..), MonadMask, MonadThrow(..), finally, try)
+import Control.Monad.IO.Class (MonadIO, liftIO)
+import Control.Monad.Trans.Class (lift)
 import System.IO (IOMode(..), hFlush, hPutStrLn, stderr, withFile)
+import System.Linux.Mount (MountFlag(..), mount')
 import System.Linux.Reboot (RebootCommand(..), reboot)
+import System.Posix.Directory (createDirectory)
+import System.Posix.Env (setEnv)
 import System.Posix.Process (getProcessID)
 
-import Data.Int
-import Data.Word
-import Foreign.C.String
-import Foreign.Ptr
-import System.Directory
+loggerAction = cmap fmtMessage logTextStdout
 
 main :: IO ()
-main = do
-    pid <- getProcessID
+main = usingLoggerT loggerAction $ do
+    pid <- liftIO getProcessID
     unless (pid == 1) $
-        fail "Not running as PID 1"
+        logError "Not running as PID 1"
 
     finallyHalt $ do
-        putStrLn "Mounting stuff"
-        mount "devtmpfs" "/dev" "devtmpfs" 0 nullPtr
-        listDirectory "/dev" >>= print
-        putStrLn "Hello, Haskell!"
-        withFile "/dev/vport0p1" WriteMode $ \fd -> do
-            hPutStrLn fd "Hello!"
-            hFlush fd
-            putStrLn "Wrote the stuff"
-        reboot Autoboot
+        logInfo "Mounting stuff"
+        liftIO $ do
+            createDirectory "/proc" 0o755
+            mount' "proc" "/proc" "proc" [MS_NOSUID, MS_NOEXEC, MS_RELATIME]
+            setEnv "LC_ALL" "C.UTF-8" True
+            putStrLn "Hello, Haskell!"
+            reboot Autoboot
 
-finallyHalt :: IO a -> IO b
+finallyHalt :: (MonadIO m, MonadMask m, MonadFail m) => m a -> m b
 finallyHalt act = finally act' $ do
-    hPutStrLn stderr "Halting system"
-    reboot HaltSystem
+    -- hPutStrLn stderr "Halting system"
+    liftIO $ reboot HaltSystem
     fail "reboot returned"
   where
     act' = do
         t <- try act
         case t of
-            Left e -> print (e :: SomeException) >> throwIO e
+            Left e -> fail (show (e :: SomeException)) -- print (e :: SomeException) >> throwIO e
             Right _ -> return ()
         return undefined
 
 
-foreign import ccall unsafe "sys/mount.h mount"
-    c_mount :: CString -> CString -> CString -> Word64 -> Ptr a -> IO Int32
-
-mount s t f m d = withCString s $ \s' -> withCString t $ \t' -> withCString f $ \f' -> c_mount s' t' f' m d
+deriving instance MonadFail m => MonadFail (LoggerT msg m)
+deriving instance MonadThrow m => MonadThrow (LoggerT msg m)
+deriving instance MonadCatch m => MonadCatch (LoggerT msg m)
+deriving instance MonadMask m => MonadMask (LoggerT msg m)
