@@ -3,6 +3,7 @@ Allow-Newer:
     co-log-0.4.0.1:base
   , co-log-0.4.0.1:typerep-map
   , co-log-0.4.0.1:text
+  , co-log-0.4.0.1:co-log-core
   , co-log-core-0.3.1.0:base
   , typerep-map-0.5.0.0:base
   , typerep-map-0.5.0.0:ghc-prim
