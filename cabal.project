@@ -1,4 +1,4 @@
 Packages: .
 Allow-Newer:
-  co-log-0.4.0.1:base
-  co-log-0.4.0.1:typerep-map
+    co-log-0.4.0.1:base
+  , co-log-0.4.0.1:typerep-map
