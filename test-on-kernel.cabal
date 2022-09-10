@@ -32,12 +32,14 @@ Executable test-on-kernel
                      , directory
                      , exceptions
                      , transformers
+                     , optparse-applicative
                      , co-log-instances
                      , linux-syscalls
   Default-Language:    Haskell2010
 
 Library linux-syscalls
-  Exposed-Modules:     System.Linux.Mount
+  Exposed-Modules:     System.Linux
+                     , System.Linux.Mount
                      , System.Linux.Reboot
   Other-Modules:       Foreign.Utils
   Hs-Source-Dirs:      internal/linux-syscalls

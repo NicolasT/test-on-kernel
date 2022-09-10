@@ -34,7 +34,7 @@ run: $(INITRAMFS) $(BZIMAGE)
 .PHONY: run
 
 initramfs: initramfs.cpio
-	$(GZIP) -c -9 < $< > $@
+	$(GZIP) -c -1 < $< > $@
 	lsinitrd $@
 
 initramfs.cpio: initramfs.cpiolist $(TEST_ON_KERNEL)
@@ -49,10 +49,18 @@ initramfs.cpiolist: test-on-kernel.lddtree
 	echo "nod /dev/kmsg 0644 0 0 c 1 11" >> $@
 	echo "nod /dev/urandom 0644 0 0 c 1 9" >> $@
 	echo "nod /dev/console 0644 0 0 c 5 1" >> $@
-	echo "file /init $(TEST_ON_KERNEL) 0755 0 0" >> $@
-	echo "dir /lib64 0755 0 0" >> $@
+	echo "dir /usr 0755 0 0" >> $@
+	echo "dir /usr/sbin 0755 0 0" >> $@
+	echo "dir /usr/lib64 0755 0 0" >> $@
+	echo "slink /sbin /usr/sbin 0755 0 0" >> $@
+	echo "slink /lib64 /usr/lib64 0755 0 0" >> $@
+	echo "file /usr/sbin/init $(TEST_ON_KERNEL) 0755 0 0" >> $@
 	echo "dir /lib 0755 0 0" >> $@
 	echo "dir /lib/x86_64-linux-gnu 0755 0 0" >> $@
+	echo "dir /usr/lib 0755 0 0" >> $@
+	echo "dir /usr/lib/locale 0755 0 0" >> $@
+	echo "dir /usr/lib/locale/C.utf8 0755 0 0" >> $@
+	echo "file /usr/lib/locale/C.utf8/LC_CTYPE /usr/lib/locale/C.utf8/LC_CTYPE 0644 0 0" >> $@
 	cat $< | $(GREP) -v "$(TEST_ON_KERNEL)" | while read line; do echo "file $$line $$line 0755 0 0" >> $@; done
 
 test-on-kernel.lddtree: $(TEST_ON_KERNEL)
