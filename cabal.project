@@ -7,5 +7,6 @@ Allow-Newer:
   , co-log-0.4.0.1:co-log-core
   , co-log-core-0.3.1.0:base
   , chronos-1.1.4:base
+  , chronos-1.1.4:text
   , typerep-map-0.5.0.0:base
   , typerep-map-0.5.0.0:ghc-prim
