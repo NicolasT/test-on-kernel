@@ -12,3 +12,4 @@ Allow-Newer:
   , typerep-map-0.5.0.0:base
   , typerep-map-0.5.0.0:ghc-prim
   , wide-word-0.1.1.2:base
+  , zigzag-0.0.1.0:base
