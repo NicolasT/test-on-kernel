@@ -9,6 +9,7 @@ Allow-Newer:
   , bytebuild-0.3.11.0:base
   , chronos-1.1.4:base
   , chronos-1.1.4:text
+  , haskell-src-meta-0.8.10:template-haskell
   , typerep-map-0.5.0.0:base
   , typerep-map-0.5.0.0:ghc-prim
   , wide-word-0.1.1.2:base
